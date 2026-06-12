@@ -38,13 +38,13 @@ spec:
       steps:
         - setWeight: 25
         - pause:
-            duration: 30s
+            duration: 90s
         - analysis:
             templates:
               - templateName: api-success-rate
         - setWeight: 50
         - pause:
-            duration: 30s
+            duration: 60s
         - analysis:
             templates:
               - templateName: api-success-rate
