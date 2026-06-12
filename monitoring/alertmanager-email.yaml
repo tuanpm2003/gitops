@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: api-email-alert
+  namespace: monitoring
+  labels:
+    alertmanagerConfig: api-email-alert
+spec:
+  route:
+    receiver: email-personal
+    groupBy:
+      - alertname
+      - severity
+    groupWait: 10s
+    groupInterval: 30s
+    repeatInterval: 5m
+  receivers:
+    - name: email-personal
+      emailConfigs:
+        - to: minhtuan.phan282@gmail.com
+          from: minhtuan.phan282@gmail.com
+          smarthost: smtp.gmail.com:587
+          authUsername: minhtuan.phan282@gmail.com
+          authPassword:
+            name: alertmanager-smtp-secret
+            key: smtp_password
+          requireTLS: true
+          sendResolved: true
