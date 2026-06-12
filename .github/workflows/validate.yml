@@ -3,11 +3,16 @@ name: validate
 on:
   pull_request:
     paths:
-      - "k8s/**"
+      - "gitops/k8s/**"
+      - "gitops/k8s-be/**"
+      - "gitops/k8s-fe/**"
+      - "backend/**"
+      - ".github/workflows/validate.yml"
 
 jobs:
-  validate:
+  validate-k8s:
     runs-on: ubuntu-latest
+    name: Validate K8s Manifests
     steps:
       - uses: actions/checkout@v4
 
@@ -17,5 +22,56 @@ jobs:
           tar -xzf kc.tgz
           sudo mv kubeconform /usr/local/bin/
 
-      - name: Validate Kubernetes manifests
-        run: kubeconform -strict -summary k8s/
+      - name: Validate k8s/ manifests
+        run: kubeconform -strict -summary gitops/k8s/
+
+      - name: Validate k8s-be/ manifests
+        run: kubeconform -strict -summary gitops/k8s-be/
+
+      - name: Validate k8s-fe/ manifests
+        run: kubeconform -strict -summary gitops/k8s-fe/
+
+  test-backend:
+    runs-on: ubuntu-latest
+    name: Test Backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: "backend/package-lock.json"
+
+      - name: Install dependencies
+        run: cd backend && npm ci
+
+      - name: Run tests
+        run: cd backend && npm test -- --coverage
+
+      - name: Check code style
+        run: cd backend && npx eslint server.js --no-eslintrc --max-warnings 0 2>/dev/null || true
+
+  build-images:
+    runs-on: ubuntu-latest
+    name: Build Docker Images
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build backend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend
+          push: false
+          tags: backend:latest
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          push: false
+          tags: frontend:latest
