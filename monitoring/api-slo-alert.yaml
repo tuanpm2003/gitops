@@ -22,6 +22,7 @@ spec:
           labels:
             severity: critical
             slo: api-success-rate
+            namespace: monitoring
           annotations:
             summary: "API success rate below SLO"
             description: "API success rate is below 95% for more than 30 seconds. Current value: {{ $value }}"
