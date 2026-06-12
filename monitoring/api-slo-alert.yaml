@@ -18,7 +18,7 @@ spec:
 
         - alert: ApiSuccessRateTooLow
           expr: api:http_success_rate:1m < 0.95
-          for: 5s
+          for: 0s
           labels:
             severity: critical
             slo: api-success-rate
