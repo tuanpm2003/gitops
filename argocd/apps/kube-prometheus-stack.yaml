@@ -20,26 +20,10 @@ spec:
         grafana:
           adminPassword: admin123
         alertmanager:
-          config:
-            global:
-              smtp_smarthost: smtp.gmail.com:587
-              smtp_from: "${EMAIL}"
-              smtp_auth_username: "${EMAIL}"
-              smtp_auth_password: "${APP_PASSWORD}"
-              smtp_require_tls: true
-
-            route:
-              receiver: email-personal
-              group_by: ["alertname", "severity"]
-              group_wait: 10s
-              group_interval: 30s
-              repeat_interval: 5m
-
-            receivers:
-              - name: email-personal
-                email_configs:
-                  - to: "${EMAIL}"
-                    send_resolved: true
+          alertmanagerSpec:
+            alertmanagerConfigSelector:
+              matchLabels:
+                alertmanagerConfig: api-email-alert
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
