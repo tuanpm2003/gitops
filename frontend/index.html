@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitOps Demo App</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel">
+        <p class="eyebrow">CI/CD GitOps Workflow</p>
+        <h1>Demo Backend + Frontend</h1>
+        <p class="intro">
+          Ung dung mau don gian gom frontend tinh va backend API, phu hop de
+          build Docker image va deploy len Kubernetes.
+        </p>
+
+        <div class="actions">
+          <button id="loadMessage" type="button">Goi API backend</button>
+          <a href="/api/health" target="_blank" rel="noreferrer"
+            >Health check</a
+          >
+        </div>
+
+        <pre id="apiResult" class="result">
+Bam nut de lay du lieu tu backend...</pre
+        >
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -30,6 +30,18 @@ spec:
         prometheus.io/port: "3000"
         prometheus.io/path: "/metrics"
     spec:
+      initContainers:
+        - name: clone-repo
+          image: alpine/git:v2.40.1
+          command:
+            - sh
+            - -c
+            - |
+              git clone --depth 1 https://github.com/tuanpm2003/gitops.git /repo
+              cp -r /repo/backend/* /app/
+          volumeMounts:
+            - name: app-code
+              mountPath: /app
       containers:
         - name: api
           image: node:18-alpine
@@ -37,7 +49,7 @@ spec:
             - sh
             - -c
             - |
-              cd /app && npm install && npm start
+              npm install --only=production && npm start
           workingDir: /app
           ports:
             - name: http
@@ -50,18 +62,22 @@ spec:
                 configMapKeyRef:
                   name: be-config
                   key: VERSION
+            - name: NODE_ENV
+              value: "production"
           readinessProbe:
             httpGet:
               path: /healthz
               port: 3000
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 10
+            timeoutSeconds: 3
           livenessProbe:
             httpGet:
               path: /healthz
               port: 3000
-            initialDelaySeconds: 15
+            initialDelaySeconds: 25
             periodSeconds: 20
+            timeoutSeconds: 3
           resources:
             requests:
               cpu: 100m
@@ -75,7 +91,3 @@ spec:
       volumes:
         - name: app-code
           emptyDir: {}
-      initContainers:
-        - name: copy-code
-          image: busybox:1.35
-          command: ["sh", "-c", 'echo "Init copy code"']

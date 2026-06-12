@@ -1,0 +1,17 @@
+{
+  "name": "simple-gitops-backend",
+  "version": "1.0.0",
+  "description": "Simple backend API for GitOps CI/CD practice",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "node",
+    "backend",
+    "gitops"
+  ],
+  "license": "MIT"
+}

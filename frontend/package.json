@@ -1,0 +1,6 @@
+{
+  "name": "simple-gitops-frontend",
+  "version": "1.0.0",
+  "description": "Simple frontend UI for GitOps CI/CD practice",
+  "license": "MIT"
+}
