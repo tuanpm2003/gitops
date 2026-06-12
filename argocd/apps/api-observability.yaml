@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<ban>/gitops.git
+    repoURL: https://github.com/tuanpm2003/gitops.git
     targetRevision: HEAD
     path: monitoring
   destination:
